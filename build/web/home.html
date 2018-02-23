@@ -62,7 +62,7 @@ and open the template in the editor.
                                             <label class="sr-only" for="registerUserPass">Password</label>
                                             <input type="password" id="loginUserPass" name="loginUserPassword" placeholder="Password..." class="form-password form-control">
                                         </div>
-                                        <button id="signinBtn" type="button" class="btn" onclick="signIn()">Sign me up!</button>
+                                        <button id="signinBtn" type="button" class="btn" onclick="signIn()">Sign in</button>
                                     </form>
                                 </div>
                             </div>
@@ -127,10 +127,8 @@ and open the template in the editor.
                     "userEmail": userEmail,
                     "userPass": userPassword
                 }, function (response, status, xhr) {
-                    if (status === "success" && response === "invalid") {
-                        alert("invalid");
-                    } else {
-                        //window.location.href = "chat/main.jsp";
+                    if (status === "success") {
+                        window.location.href = "chat/main.jsp";
                     }
                 });
             }
@@ -142,10 +140,10 @@ and open the template in the editor.
                     "userEmail": userEmail,
                     "userPass": userPassword
                 }, function (response, status, xhr) {
-                    if (status === "success" && response === "invalid") {
-                        alert("invalid");
+                    if (status === "success" && response === "valid") {
+                        window.location.href = "chat/main.jsp";
                     } else {
-                        //window.location.href = "chat/main.jsp";
+                        alert("invalid username or password");
                     }
                 });
             }

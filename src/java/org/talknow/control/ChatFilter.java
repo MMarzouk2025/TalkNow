@@ -9,6 +9,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class ChatFilter implements Filter {
 
@@ -20,9 +21,14 @@ public class ChatFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         // check session here
-        String username = (String)((HttpServletRequest)request).getSession(false).getAttribute("userName");
-        if (username != null) {
-            chain.doFilter(request,response);
+        
+        HttpSession mSession = ((HttpServletRequest)request).getSession(false);
+        if (mSession != null) {
+            String user = (String) mSession.getAttribute("userName");
+            if (user != null || !user.isEmpty())
+                chain.doFilter(request,response);
+            else
+                ((HttpServletResponse)response).sendRedirect("http://localhost:9030/TalkNow/home.html");
         } else {
             ((HttpServletResponse)response).sendRedirect("http://localhost:9030/TalkNow/home.html");
         }

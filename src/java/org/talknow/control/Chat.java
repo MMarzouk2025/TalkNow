@@ -16,26 +16,26 @@ public class Chat extends HttpServlet {
 
     public Vector<User> chatUsers = new Vector<>();
     public Vector<Message> messages = new Vector<>();
-
+    
+    /*
     @Override
     public void init() throws ServletException {
         super.init(); //To change body of generated methods, choose Tools | Templates.
-        chatUsers.add(new User("Marzouk", "123456", "Marzouk@gmail.com"));
     }
+    */
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setCharacterEncoding("utf-8"); 
         PrintWriter writer = response.getWriter();
-
+        
         Gson messagesJsonBuilder = new Gson();
         String messagesJson = messagesJsonBuilder.toJson(messages);
-        writer.write(messagesJson);
-        /*
         Gson usersJsonBuilder = new Gson();
         String usersJson = usersJsonBuilder.toJson(chatUsers);
-        writer.write(usersJson);
-        */
+        String bothJson = "["+messagesJson+","+usersJson+"]";
+        writer.write(bothJson);
     }
 
     @Override
@@ -50,6 +50,9 @@ public class Chat extends HttpServlet {
             String userPassword = request.getParameter("userPassword");
             User newUser = new User(username, userPassword, userEmail);
             chatUsers.add(newUser);
+            HttpSession mSession = request.getSession(true);
+            mSession.setAttribute("userName", username);
+            System.out.println(username);
         } else if (action.equals("login")) {
             if (checkLoginParameters(request)) {
                 HttpSession mSession = request.getSession();
