@@ -47,22 +47,16 @@ public class Chat extends HttpServlet {
         if  (action.equals("register")){
             String username = request.getParameter("userName");
             String userEmail = request.getParameter("userEmail");
-            String userPassword = request.getParameter("userPassword");
+            String userPassword = request.getParameter("userPass");
             User newUser = new User(username, userPassword, userEmail);
             chatUsers.add(newUser);
             HttpSession mSession = request.getSession(true);
             mSession.setAttribute("userName", username);
             System.out.println(username);
         } else if (action.equals("login")) {
-            if (checkLoginParameters(request)) {
-                HttpSession mSession = request.getSession();
-                String userEmail = request.getParameter("userEmail");
-                String username = "";
-                for (User user : chatUsers) {
-                    if (user.getEmail().equals(userEmail)) {
-                        username = user.getUserName();
-                    }
-                }
+            String username = checkLoginParameters(request);
+            if (username != null) {
+                HttpSession mSession = request.getSession(true);
                 mSession.setAttribute("userName", username);
                 writer.write("valid");
             } else {
@@ -73,20 +67,22 @@ public class Chat extends HttpServlet {
             String messageText = request.getParameter("msg");
             Message msg = new Message(senderUser, messageText);
             messages.add(msg);
+        } else if (action.equals("logout")) {
+            request.getSession(false).invalidate();
         }
 
     }
 
-    private boolean checkLoginParameters(HttpServletRequest request) {
-        boolean result = false;
+    private String checkLoginParameters(HttpServletRequest request) {
+        String username = null;
         String email = request.getParameter("userEmail");
         String password = request.getParameter("userPass");
         for (User u : chatUsers) {
             if (u.getEmail().equals(email) && u.getPassword().equals(password)) {
-                result = true;
+                username = u.getUserName();
             }
         }
-        return result;
+        return username;
     }
 
 }

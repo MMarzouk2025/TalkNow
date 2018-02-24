@@ -19,6 +19,7 @@
             </div>
 
             <div id="rightArea">
+                <button id="logoutBtn" onclick="logout()">Logout</button>
                 <table id="usersTable" border="0" style="float: right; padding: 2%; overflow: hidden;">
                     <!--
                     <tr>
@@ -40,7 +41,6 @@
         <script type="text/javascript">
                             function sendMessage() {
                                 var user = $("#usernameField").html();
-                                alert(user);
                                 var msg = $("#msgTxt").val();
                                 $.post("../chat", {
                                     "action": "message",
@@ -48,6 +48,14 @@
                                     "msg": msg
                                 });
                                 $("#msgTxt").val("");
+                            }
+                            function logout() {
+                                var user = $("#usernameField").html();
+                                $.post("../chat", {
+                                    "action": "logout",
+                                    "user": user
+                                });
+                                window.location.href = "../home.html";
                             }
                             setInterval(function () {
                                 $.get("../chat", function (response, status, xhr) {
@@ -70,7 +78,7 @@
                                     }
                                 }
                                 )
-                            }, 1000);
+                            }, 250);
         </script>
     </body>
 </html>

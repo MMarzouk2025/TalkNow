@@ -41,7 +41,7 @@ and open the template in the editor.
 
                     <div class="row">
                         <div class="col-sm-5">
-                            
+                            <div id="warning" style="color: #cc0000; font-size: 24px;"></div>
                             <div class="form-box">
                                 <div class="form-top">
                                     <div class="form-top-left">
@@ -120,17 +120,22 @@ and open the template in the editor.
             function signUp() {
                 var userName = $("#registerUserName").val();
                 var userEmail = $("#registerUserEmail").val();
-                var userPassword = $("#registerUserPasss").val();
-                $.post("chat", {
-                    "action": "register",
-                    "userName": userName,
-                    "userEmail": userEmail,
-                    "userPass": userPassword
-                }, function (response, status, xhr) {
-                    if (status === "success") {
-                        window.location.href = "chat/main.jsp";
-                    }
-                });
+                var userPassword = $("#registerUserPass").val();
+                var userPasswordConfirmation = $("#registerUserPassConfirmation").val();
+                if (userPassword != userPasswordConfirmation) {
+                    alert("wrong password confirmation");
+                } else {
+                    $.post("chat", {
+                        "action": "register",
+                        "userName": userName,
+                        "userEmail": userEmail,
+                        "userPass": userPassword
+                    }, function (response, status, xhr) {
+                        if (status === "success") {
+                            window.location.href = "chat/main.jsp";
+                        }
+                    });
+                }
             }
             function signIn() {
                 var userEmail = $("#loginUserEmail").val();
@@ -142,8 +147,9 @@ and open the template in the editor.
                 }, function (response, status, xhr) {
                     if (status === "success" && response === "valid") {
                         window.location.href = "chat/main.jsp";
+                        //$("#warning").html("");
                     } else {
-                        alert("invalid username or password");
+                        $("#warning").html("Invalid email or password");
                     }
                 });
             }
